@@ -1,21 +1,24 @@
+const express = require("express");
+const hbs = require("hbs");
+const app = express();
+const path = require("path");
+app.set("env development");
+app.set("view engine", "hbs");
+app.set("views", __dirname + "/views");
+app.use(express.static(path.join(__dirname, "public")));
+hbs.registerPartials(__dirname + "/views/partials");
 
-const express = require('express');
-const hbs     = require('hbs');
-const app     = express();
-const path    = require('path');
-const PunkAPIWrapper = require('punkapi-javascript-wrapper');
-const punkAPI = new PunkAPIWrapper();
+const beerRouter = require("./routes/beers");
+app.use(beerRouter);
 
-app.set('view engine', 'hbs');
-app.set('views', __dirname + '/views');
-app.use(express.static(path.join(__dirname, 'public')));
+const randomRouter = require("./routes/random-beer");
+app.use(randomRouter);
 
-
-
-app.get('/', (req, res, next) => {
-  res.render('index');
+app.get("/", (req, res, next) => {
+  res.render("index");
 });
 
 
-
-app.listen(3000);
+app.listen(3000, () => {
+  console.log("Listening in http://localhost:3000");
+});
